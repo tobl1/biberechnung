@@ -47,7 +47,7 @@ export function SettingsSheet({ open, players, theme, onClose, onSetCount, onUpd
         {/* Design */}
         <div className="ink-5 mb-6 rounded-2xl p-3">
           <div className="mb-2 px-1 font-medium">Design</div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
             {THEME_KEYS.map((key) => {
               const active = key === theme
               return (

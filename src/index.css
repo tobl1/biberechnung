@@ -75,6 +75,56 @@ html[data-theme="grain"] {
   --grain-opacity: 0.9;
 }
 
+html[data-theme="azul"] {
+  color-scheme: light;
+  --bg: #efe6d4;
+  --text: #1f2a44;
+  --tile-base: #f8f1e3;
+  --tile-mix-a: 14%;
+  --tile-mix-b: 6%;
+  --tile-hi: rgba(255, 255, 255, 0.9);
+  --tile-border: color-mix(in oklab, var(--c, #fff) 45%, transparent);
+  --name-mix: 85%;
+  --glow-opacity: 0;
+  --glass-bg: rgba(255, 250, 240, 0.8);
+  --glass-strong-bg: rgba(255, 250, 240, 0.85);
+  --sheet-bg: rgba(248, 241, 227, 0.96);
+  --sheet-solid: #f8f1e3;
+  --surface: rgba(255, 255, 255, 0.75);
+  --shadow: rgba(31, 42, 68, 0.3);
+  --blob-1: rgba(47, 111, 181, 0.25);
+  --blob-2: rgba(226, 88, 52, 0.22);
+  --blob-3: rgba(240, 180, 60, 0.25);
+  --blob-4: rgba(60, 170, 190, 0.2);
+  --grain-opacity: 0;
+  --art-opacity: 0.32;
+}
+
+html[data-theme="faraway"] {
+  color-scheme: dark;
+  --bg: #1c1236;
+  --text: #f3ecff;
+  --tile-base: #24173f;
+  --tile-mix-a: 40%;
+  --tile-mix-b: 14%;
+  --tile-hi: color-mix(in oklab, var(--c, #fff) 50%, transparent);
+  --tile-border: color-mix(in oklab, var(--c, #fff) 25%, transparent);
+  --name-mix: 100%;
+  --glow-opacity: 0.45;
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-strong-bg: rgba(40, 26, 70, 0.8);
+  --sheet-bg: rgba(30, 20, 56, 0.95);
+  --sheet-solid: #1e1438;
+  --surface: rgba(255, 255, 255, 0.10);
+  --shadow: rgba(0, 0, 0, 0.6);
+  --blob-1: rgba(139, 92, 246, 0.35);
+  --blob-2: rgba(236, 72, 153, 0.22);
+  --blob-3: rgba(250, 204, 21, 0.14);
+  --blob-4: rgba(56, 189, 248, 0.18);
+  --grain-opacity: 0;
+  --art-opacity: 0.28;
+}
+
 /* ---------- Basis ---------- */
 
 html {
@@ -84,7 +134,11 @@ html {
 html, body, #root {
   height: 100%;
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(70vmax 70vmax at 0% 0%, var(--blob-1), transparent 70%),
+    radial-gradient(60vmax 60vmax at 100% 100%, var(--blob-2), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--text);
   font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   overscroll-behavior: none;
@@ -138,17 +192,22 @@ body {
   100% { transform: translate(6vw, 4vh) scale(1.1); }
 }
 
-/* Körnung: SVG-Rauschen als Overlay über allem, nur im Körnig-Theme sichtbar */
-.grain {
-  position: fixed;
+/* Körnung: SVG-Rauschen nur auf Hintergrund und Kachelfläche — Text, Buttons und Leiste bleiben sauber */
+:root { --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.75'/%3E%3C/svg%3E"); }
+
+.bg-layer::after,
+.tile::before {
+  content: '';
+  position: absolute;
   inset: 0;
-  z-index: 60;
   pointer-events: none;
   opacity: var(--grain-opacity);
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.75'/%3E%3C/svg%3E");
+  background-image: var(--noise);
   background-size: 200px 200px;
 }
+.bg-layer::after { z-index: 1; }
+.tile::before { z-index: 1; border-radius: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob { animation: none; }
@@ -171,6 +230,11 @@ body {
 .tile-glow   { background: var(--c); opacity: var(--glow-opacity); }
 .tile-glow-2 { background: color-mix(in oklab, var(--c) 60%, #fff); opacity: calc(var(--glow-opacity) * 0.5); }
 .tile-name   { color: color-mix(in oklab, var(--c) var(--name-mix), var(--text)); }
+
+/* Theme-Kunst in der Kachel */
+.tile-art { opacity: var(--art-opacity, 0); background-size: 80px 80px; }
+.tile-watermark { right: -6%; bottom: -4%; width: 62%; height: auto; object-fit: contain; filter: saturate(0.6); }
+html[data-theme="azul"] .tile { border-radius: 1rem; }
 
 /* Im Körnig-Theme: Kacheln selbst zusätzlich körnig + stärkeres Airbrush-Blur */
 html[data-theme="grain"] .tile-glow,
@@ -215,3 +279,7 @@ html[data-theme="grain"] .tile-glow-2 { filter: blur(48px); }
   100% { transform: scale(1); }
 }
 .score { animation: pop 180ms ease-out; }
+
+/* Stapelung in der Kachel: Flecken + Kunst unten, Körnung darüber, Name/Zahl/Buttons ganz oben (ohne Körnung) */
+.tile > * { z-index: 2; }
+.tile > .tile-glow, .tile > .tile-glow-2, .tile > .tile-art { z-index: 0; }

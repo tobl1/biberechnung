@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useGame } from './hooks/useGame'
+import { THEMES } from './lib/themes'
 import { Background } from './components/Background'
 import { PlayerTile } from './components/PlayerTile'
 import { ControlBar } from './components/ControlBar'
@@ -42,6 +43,7 @@ function App() {
             index={i}
             score={game.scores[p.id] ?? 0}
             count={game.players.length}
+            art={THEMES[game.theme]?.art ?? 'none'}
             onAdd={(d) => game.addPoints(p.id, d)}
           />
         ))}
