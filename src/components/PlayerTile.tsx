@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import type { Player } from '../lib/types'
-import type { ThemeArt } from '../lib/themes'
+import type { GameArt } from '../lib/games'
 import { hexFor } from '../lib/colors'
-import { azulPattern } from '../lib/azul'
+import { TilePattern } from './TilePattern'
 
 type Props = {
   player: Player
   score: number
   count: number // Anzahl Spieler gesamt → steuert Schriftgröße
   index: number
-  art: ThemeArt
+  art: GameArt
   onAdd: (delta: number) => void
 }
 
@@ -44,11 +44,9 @@ export function PlayerTile({ player, score, count, index, art, onAdd }: Props) {
       <span className="tile-glow pointer-events-none absolute -top-1/4 -left-1/4 h-2/3 w-2/3 rounded-full blur-3xl" />
       <span className="tile-glow-2 pointer-events-none absolute -bottom-1/4 -right-1/4 h-2/3 w-2/3 rounded-full blur-3xl" />
 
-      {/* Theme-Kunst: Azul-Muster oder Faraway-Wasserzeichen */}
-      {art === 'azul' && (
-        <span className="tile-art pointer-events-none absolute inset-0" style={{ backgroundImage: azulPattern(index, hex) }} />
-      )}
-      {art === 'faraway' && (
+      {/* Spiel-Overlay: Fliesenmuster oder Wasserzeichen */}
+      {art === 'pattern' && <TilePattern id={player.id} index={index} color={hex} />}
+      {art === 'watermark' && (
         <img
           src={`/themes/faraway/${(index % 8) + 1}.png`}
           alt=""

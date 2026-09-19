@@ -2,20 +2,23 @@ import { Minus, Plus, X } from 'lucide-react'
 import type { Player } from '../lib/types'
 import { PALETTE, PALETTE_KEYS } from '../lib/colors'
 import { THEMES, THEME_KEYS } from '../lib/themes'
+import { GAMES, GAME_KEYS } from '../lib/games'
 import { MIN_PLAYERS, MAX_PLAYERS } from '../lib/storage'
 
 type Props = {
   open: boolean
   players: Player[]
   theme: string
+  game: string
   onClose: () => void
   onSetCount: (n: number) => void
   onUpdate: (id: string, patch: Partial<Omit<Player, 'id'>>) => void
   onSetTheme: (key: string) => void
+  onSetGame: (key: string) => void
 }
 
 // Bottom-Sheet mit Spieleranzahl, Design, Namen und Farben
-export function SettingsSheet({ open, players, theme, onClose, onSetCount, onUpdate, onSetTheme }: Props) {
+export function SettingsSheet({ open, players, theme, game, onClose, onSetCount, onUpdate, onSetTheme, onSetGame }: Props) {
   return (
     <>
       <div
@@ -47,7 +50,7 @@ export function SettingsSheet({ open, players, theme, onClose, onSetCount, onUpd
         {/* Design */}
         <div className="ink-5 mb-6 rounded-2xl p-3">
           <div className="mb-2 px-1 font-medium">Design</div>
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+          <div className="grid grid-cols-3 gap-2">
             {THEME_KEYS.map((key) => {
               const active = key === theme
               return (
@@ -62,6 +65,27 @@ export function SettingsSheet({ open, players, theme, onClose, onSetCount, onUpd
                     <span className="block text-sm font-semibold">{THEMES[key].label}</span>
                     <span className="block text-[11px] opacity-60">{THEMES[key].hint}</span>
                   </span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Spiel-Overlay */}
+        <div className="ink-5 mb-6 rounded-2xl p-3">
+          <div className="mb-2 px-1 font-medium">Spiel</div>
+          <div className="grid grid-cols-3 gap-2">
+            {GAME_KEYS.map((key) => {
+              const active = key === game
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => onSetGame(key)}
+                  className={`rounded-xl px-2 py-2 text-center transition-colors ${active ? 'btn-primary' : 'surface'}`}
+                >
+                  <span className="block text-sm font-semibold">{GAMES[key].label}</span>
+                  <span className="block text-[11px] opacity-60">{GAMES[key].hint}</span>
                 </button>
               )
             })}

@@ -25,6 +25,7 @@
   --blob-3: rgba(96, 165, 250, 0.35);
   --blob-4: rgba(250, 204, 21, 0.30);
   --grain-opacity: 0;
+  --art-opacity: 0.28;
 }
 
 html[data-theme="dark"] {
@@ -49,6 +50,7 @@ html[data-theme="dark"] {
   --blob-3: rgba(96, 165, 250, 0.20);
   --blob-4: rgba(167, 139, 250, 0.18);
   --grain-opacity: 0;
+  --art-opacity: 0.35;
 }
 
 html[data-theme="grain"] {
@@ -73,56 +75,7 @@ html[data-theme="grain"] {
   --blob-3: rgba(196, 181, 253, 0.5);
   --blob-4: rgba(253, 164, 175, 0.4);
   --grain-opacity: 0.9;
-}
-
-html[data-theme="azul"] {
-  color-scheme: light;
-  --bg: #efe6d4;
-  --text: #1f2a44;
-  --tile-base: #f8f1e3;
-  --tile-mix-a: 14%;
-  --tile-mix-b: 6%;
-  --tile-hi: rgba(255, 255, 255, 0.9);
-  --tile-border: color-mix(in oklab, var(--c, #fff) 45%, transparent);
-  --name-mix: 85%;
-  --glow-opacity: 0;
-  --glass-bg: rgba(255, 250, 240, 0.8);
-  --glass-strong-bg: rgba(255, 250, 240, 0.85);
-  --sheet-bg: rgba(248, 241, 227, 0.96);
-  --sheet-solid: #f8f1e3;
-  --surface: rgba(255, 255, 255, 0.75);
-  --shadow: rgba(31, 42, 68, 0.3);
-  --blob-1: rgba(47, 111, 181, 0.25);
-  --blob-2: rgba(226, 88, 52, 0.22);
-  --blob-3: rgba(240, 180, 60, 0.25);
-  --blob-4: rgba(60, 170, 190, 0.2);
-  --grain-opacity: 0;
-  --art-opacity: 0.32;
-}
-
-html[data-theme="faraway"] {
-  color-scheme: dark;
-  --bg: #1c1236;
-  --text: #f3ecff;
-  --tile-base: #24173f;
-  --tile-mix-a: 40%;
-  --tile-mix-b: 14%;
-  --tile-hi: color-mix(in oklab, var(--c, #fff) 50%, transparent);
-  --tile-border: color-mix(in oklab, var(--c, #fff) 25%, transparent);
-  --name-mix: 100%;
-  --glow-opacity: 0.45;
-  --glass-bg: rgba(255, 255, 255, 0.12);
-  --glass-strong-bg: rgba(40, 26, 70, 0.8);
-  --sheet-bg: rgba(30, 20, 56, 0.95);
-  --sheet-solid: #1e1438;
-  --surface: rgba(255, 255, 255, 0.10);
-  --shadow: rgba(0, 0, 0, 0.6);
-  --blob-1: rgba(139, 92, 246, 0.35);
-  --blob-2: rgba(236, 72, 153, 0.22);
-  --blob-3: rgba(250, 204, 21, 0.14);
-  --blob-4: rgba(56, 189, 248, 0.18);
-  --grain-opacity: 0;
-  --art-opacity: 0.28;
+  --art-opacity: 0.3;
 }
 
 /* ---------- Basis ---------- */
@@ -134,11 +87,7 @@ html {
 html, body, #root {
   height: 100%;
   margin: 0;
-  background:
-    radial-gradient(70vmax 70vmax at 0% 0%, var(--blob-1), transparent 70%),
-    radial-gradient(60vmax 60vmax at 100% 100%, var(--blob-2), transparent 70%),
-    var(--bg);
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--text);
   font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   overscroll-behavior: none;
@@ -160,13 +109,11 @@ body {
 
 /* ---------- Hintergrund: driftende Farbflecken + Körnung ---------- */
 
-/* Reicht bewusst über den Viewport hinaus: iOS-Safari zeigt unter der Toolbar sonst den nackten Body */
+/* iOS malt unterhalb des Viewports (Toolbar / Web-App-Rand) nur die flache Hintergrundfarbe.
+   Deshalb blendet der Layer nach unten in genau diese Farbe aus — so gibt es keine sichtbare Kante. */
 .bg-layer {
   position: fixed;
-  top: -20vh;
-  bottom: -40vh;
-  left: 0;
-  right: 0;
+  inset: 0;
   z-index: 0;
   overflow: hidden;
   background: var(--bg);
@@ -206,7 +153,15 @@ body {
   background-image: var(--noise);
   background-size: 200px 200px;
 }
-.bg-layer::after { z-index: 1; }
+.bg-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 55%, var(--bg) 100%);
+}
+.bg-layer::after { z-index: 2; }
 .tile::before { z-index: 1; border-radius: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -232,9 +187,8 @@ body {
 .tile-name   { color: color-mix(in oklab, var(--c) var(--name-mix), var(--text)); }
 
 /* Theme-Kunst in der Kachel */
-.tile-art { opacity: var(--art-opacity, 0); background-size: 80px 80px; }
+.tile-art { opacity: var(--art-opacity, 0); }
 .tile-watermark { right: -6%; bottom: -4%; width: 62%; height: auto; object-fit: contain; filter: saturate(0.6); }
-html[data-theme="azul"] .tile { border-radius: 1rem; }
 
 /* Im Körnig-Theme: Kacheln selbst zusätzlich körnig + stärkeres Airbrush-Blur */
 html[data-theme="grain"] .tile-glow,

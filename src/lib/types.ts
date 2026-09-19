@@ -8,4 +8,5 @@ export type GameState = {
   players: Player[]
   scores: Record<string, number>
   theme: string // Key aus THEMES
+  game: string // Key aus GAMES
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useGame } from './hooks/useGame'
-import { THEMES } from './lib/themes'
+import { GAMES } from './lib/games'
 import { Background } from './components/Background'
 import { PlayerTile } from './components/PlayerTile'
 import { ControlBar } from './components/ControlBar'
@@ -43,7 +43,7 @@ function App() {
             index={i}
             score={game.scores[p.id] ?? 0}
             count={game.players.length}
-            art={THEMES[game.theme]?.art ?? 'none'}
+            art={GAMES[game.game]?.art ?? 'none'}
             onAdd={(d) => game.addPoints(p.id, d)}
           />
         ))}
@@ -55,10 +55,12 @@ function App() {
         open={settingsOpen}
         players={game.players}
         theme={game.theme}
+        game={game.game}
         onClose={() => setSettingsOpen(false)}
         onSetCount={game.setPlayerCount}
         onUpdate={game.updatePlayer}
         onSetTheme={game.setTheme}
+        onSetGame={game.setGame}
       />
     </div>
   )

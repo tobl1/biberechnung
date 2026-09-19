@@ -38,5 +38,9 @@ export function useGame() {
     setState((s) => ({ ...s, theme }))
   }, [])
 
-  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer, setTheme }
+  const setGame = useCallback((game: string) => {
+    setState((s) => ({ ...s, game }))
+  }, [])
+
+  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer, setTheme, setGame }
 }
