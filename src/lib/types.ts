@@ -7,4 +7,5 @@ export type Player = {
 export type GameState = {
   players: Player[]
   scores: Record<string, number>
+  font: string // Key aus FONTS
 }

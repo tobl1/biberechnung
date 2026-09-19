@@ -21,9 +21,9 @@ export function useGame() {
     const n = Math.max(MIN_PLAYERS, Math.min(MAX_PLAYERS, count))
     setState((s) => {
       const players = s.players.slice(0, n)
-      while (players.length < n) players.push(newPlayer(players.length))
+      while (players.length < n) players.push(newPlayer(players.length, players.map((p) => p.color)))
       const scores = Object.fromEntries(players.map((p) => [p.id, s.scores[p.id] ?? 0]))
-      return { players, scores }
+      return { ...s, players, scores }
     })
   }, [])
 
@@ -34,5 +34,9 @@ export function useGame() {
     }))
   }, [])
 
-  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer }
+  const setFont = useCallback((font: string) => {
+    setState((s) => ({ ...s, font }))
+  }, [])
+
+  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer, setFont }
 }

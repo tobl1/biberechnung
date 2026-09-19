@@ -1,5 +1,6 @@
 import type { GameState, Player } from './types'
 import { PALETTE_KEYS } from './colors'
+import { DEFAULT_FONT } from './fonts'
 
 const KEY = 'biberechnung:v1'
 
@@ -12,24 +13,22 @@ export function defaultState(): GameState {
     { id: 'p1', name: 'M', color: 'mint' },
     { id: 'p2', name: 'T', color: 'rot' },
   ]
-  return { players, scores: Object.fromEntries(players.map((p) => [p.id, 0])) }
+  return { players, scores: Object.fromEntries(players.map((p) => [p.id, 0])), font: DEFAULT_FONT }
 }
 
-export function newPlayer(index: number): Player {
-  return {
-    id: `p${index + 1}-${Date.now().toString(36)}`,
-    name: `S${index + 1}`,
-    color: PALETTE_KEYS[index % PALETTE_KEYS.length],
-  }
+// Neue Spieler ohne Namen, aber mit noch unbenutzter Farbe
+export function newPlayer(index: number, usedColors: string[]): Player {
+  const free = PALETTE_KEYS.find((k) => !usedColors.includes(k)) ?? PALETTE_KEYS[index % PALETTE_KEYS.length]
+  return { id: `p${index + 1}-${Date.now().toString(36)}`, name: '', color: free }
 }
 
 export function loadState(): GameState {
   try {
     const raw = localStorage.getItem(KEY)
     if (!raw) return defaultState()
-    const parsed = JSON.parse(raw) as GameState
+    const parsed = JSON.parse(raw) as Partial<GameState>
     if (!Array.isArray(parsed.players) || parsed.players.length < MIN_PLAYERS) return defaultState()
-    return { players: parsed.players, scores: parsed.scores ?? {} }
+    return { players: parsed.players, scores: parsed.scores ?? {}, font: parsed.font ?? DEFAULT_FONT }
   } catch {
     return defaultState()
   }

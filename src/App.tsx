@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useGame } from './hooks/useGame'
+import { familyFor } from './lib/fonts'
 import { PlayerTile } from './components/PlayerTile'
 import { ControlBar } from './components/ControlBar'
 import { SettingsSheet } from './components/SettingsSheet'
@@ -17,7 +18,7 @@ function App() {
   const { cols, rows } = gridFor(game.players.length)
 
   return (
-    <div className="h-dvh w-full overflow-hidden bg-[#0b1612] text-white">
+    <div className="app h-dvh w-full overflow-hidden text-[#14231c]" style={{ fontFamily: familyFor(game.font) }}>
       <main
         className="grid h-full gap-2 p-2 pt-[max(env(safe-area-inset-top),8px)] pb-[calc(max(env(safe-area-inset-bottom),12px)+76px)]"
         style={{
@@ -25,10 +26,11 @@ function App() {
           gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
         }}
       >
-        {game.players.map((p) => (
+        {game.players.map((p, i) => (
           <PlayerTile
             key={p.id}
             player={p}
+            index={i}
             score={game.scores[p.id] ?? 0}
             count={game.players.length}
             onAdd={(d) => game.addPoints(p.id, d)}
@@ -41,9 +43,11 @@ function App() {
       <SettingsSheet
         open={settingsOpen}
         players={game.players}
+        font={game.font}
         onClose={() => setSettingsOpen(false)}
         onSetCount={game.setPlayerCount}
         onUpdate={game.updatePlayer}
+        onSetFont={game.setFont}
       />
     </div>
   )
