@@ -1,15 +1,92 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@500;600;700&family=Doto:wght@600;800;900&family=Orbitron:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
 
-:root {
+/* ---------- Themes: alle Farben als Variablen auf <html data-theme> ---------- */
+
+:root, html[data-theme="light"] {
   color-scheme: light;
+  --bg: #eef1ee;
+  --text: #14231c;
+  --tile-base: #ffffff;
+  --tile-mix-a: 40%;
+  --tile-mix-b: 18%;
+  --tile-hi: rgba(255, 255, 255, 0.9);
+  --tile-border: rgba(255, 255, 255, 0.55);
+  --name-mix: 70%;
+  --glow-opacity: 0.5;
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-strong-bg: rgba(255, 255, 255, 0.72);
+  --sheet-bg: rgba(243, 245, 243, 0.94);
+  --sheet-solid: #f3f5f3;
+  --surface: rgba(255, 255, 255, 0.7);
+  --shadow: rgba(20, 35, 28, 0.3);
+  --blob-1: rgba(52, 211, 153, 0.45);
+  --blob-2: rgba(248, 113, 113, 0.35);
+  --blob-3: rgba(96, 165, 250, 0.35);
+  --blob-4: rgba(250, 204, 21, 0.30);
+  --grain-opacity: 0;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1612;
+  --text: #f2f5f2;
+  --tile-base: #0a1410;
+  --tile-mix-a: 34%;
+  --tile-mix-b: 12%;
+  --tile-hi: color-mix(in oklab, var(--c, #fff) 45%, transparent);
+  --tile-border: color-mix(in oklab, var(--c, #fff) 22%, transparent);
+  --name-mix: 100%;
+  --glow-opacity: 0.4;
+  --glass-bg: rgba(255, 255, 255, 0.10);
+  --glass-strong-bg: rgba(20, 35, 28, 0.75);
+  --sheet-bg: rgba(14, 28, 22, 0.94);
+  --sheet-solid: #0e1c16;
+  --surface: rgba(255, 255, 255, 0.10);
+  --shadow: rgba(0, 0, 0, 0.6);
+  --blob-1: rgba(52, 211, 153, 0.25);
+  --blob-2: rgba(248, 113, 113, 0.18);
+  --blob-3: rgba(96, 165, 250, 0.20);
+  --blob-4: rgba(167, 139, 250, 0.18);
+  --grain-opacity: 0;
+}
+
+html[data-theme="grain"] {
+  color-scheme: light;
+  --bg: #e9e6f5;
+  --text: #3b3566;
+  --tile-base: #f6f3fc;
+  --tile-mix-a: 55%;
+  --tile-mix-b: 22%;
+  --tile-hi: rgba(255, 255, 255, 0.7);
+  --tile-border: rgba(255, 255, 255, 0.35);
+  --name-mix: 60%;
+  --glow-opacity: 0.85;
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-strong-bg: rgba(255, 255, 255, 0.65);
+  --sheet-bg: rgba(240, 237, 250, 0.95);
+  --sheet-solid: #f0edfa;
+  --surface: rgba(255, 255, 255, 0.6);
+  --shadow: rgba(59, 53, 102, 0.3);
+  --blob-1: rgba(167, 139, 250, 0.55);
+  --blob-2: rgba(251, 191, 130, 0.55);
+  --blob-3: rgba(196, 181, 253, 0.5);
+  --blob-4: rgba(253, 164, 175, 0.4);
+  --grain-opacity: 0.55;
+}
+
+/* ---------- Basis ---------- */
+
+html {
   -webkit-tap-highlight-color: transparent;
 }
 
 html, body, #root {
   height: 100%;
   margin: 0;
-  background: #eef1ee;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   overscroll-behavior: none;
 }
 
@@ -20,41 +97,112 @@ body {
   -webkit-user-select: none;
 }
 
-/* Heller Hintergrund mit weichen Farbflecken, damit das Glas was zum Durchscheinen hat */
-.app {
-  background:
-    radial-gradient(60% 50% at 10% 0%, rgba(52, 211, 153, 0.22), transparent 70%),
-    radial-gradient(50% 45% at 95% 100%, rgba(248, 113, 113, 0.20), transparent 70%),
-    radial-gradient(40% 40% at 80% 20%, rgba(96, 165, 250, 0.16), transparent 70%),
-    #eef1ee;
-}
-
 .input {
   font-size: 16px; /* verhindert iOS-Auto-Zoom */
   user-select: text;
   -webkit-user-select: text;
 }
+.input::placeholder { color: color-mix(in srgb, var(--text) 35%, transparent); }
+
+/* ---------- Hintergrund: driftende Farbflecken + Körnung ---------- */
+
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--bg);
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  will-change: transform;
+  animation: drift 26s ease-in-out infinite alternate;
+}
+.blob-1 { width: 70vmax; height: 70vmax; left: -25vmax; top: -25vmax; background: var(--blob-1); }
+.blob-2 { width: 60vmax; height: 60vmax; right: -20vmax; bottom: -20vmax; background: var(--blob-2); animation-duration: 32s; animation-delay: -8s; }
+.blob-3 { width: 50vmax; height: 50vmax; right: -10vmax; top: 10vmax; background: var(--blob-3); animation-duration: 38s; animation-delay: -16s; }
+.blob-4 { width: 45vmax; height: 45vmax; left: 0; bottom: 5vmax; background: var(--blob-4); animation-duration: 30s; animation-delay: -4s; }
+
+@keyframes drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(12vw, -8vh) scale(1.15); }
+  66%  { transform: translate(-8vw, 10vh) scale(0.95); }
+  100% { transform: translate(6vw, 4vh) scale(1.1); }
+}
+
+/* Körnung: SVG-Rauschen als Overlay über allem, nur im Körnig-Theme sichtbar */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob { animation: none; }
+}
+
+/* ---------- Kacheln ---------- */
+
+.tile {
+  color: var(--text);
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--c) var(--tile-mix-a), var(--tile-base)) 0%,
+    color-mix(in oklab, var(--c) var(--tile-mix-b), var(--tile-base)) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 var(--tile-hi),
+    inset 0 0 0 1px var(--tile-border),
+    0 10px 30px -14px color-mix(in oklab, var(--c) 60%, transparent);
+}
+.tile-glow   { background: var(--c); opacity: var(--glow-opacity); }
+.tile-glow-2 { background: color-mix(in oklab, var(--c) 60%, #fff); opacity: calc(var(--glow-opacity) * 0.5); }
+.tile-name   { color: color-mix(in oklab, var(--c) var(--name-mix), var(--text)); }
+
+/* Im Körnig-Theme: Kacheln selbst zusätzlich körnig + stärkeres Airbrush-Blur */
+html[data-theme="grain"] .tile-glow,
+html[data-theme="grain"] .tile-glow-2 { filter: blur(48px); }
+
+/* ---------- Glas-Flächen ---------- */
 
 .glass {
-  background: rgba(255, 255, 255, 0.55);
+  color: var(--text);
+  background: var(--glass-bg);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 4px 14px -6px rgba(20, 35, 28, 0.25);
+  box-shadow: inset 0 1px 0 var(--tile-hi), inset 0 0 0 1px var(--tile-border), 0 4px 14px -6px var(--shadow);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  background: var(--glass-strong-bg);
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 12px 36px -12px rgba(20, 35, 28, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.25), 0 12px 36px -12px var(--shadow);
 }
 
 .sheet {
-  background: rgba(243, 245, 243, 0.94);
+  color: var(--text);
+  background: var(--sheet-bg);
   backdrop-filter: blur(24px) saturate(140%);
   -webkit-backdrop-filter: blur(24px) saturate(140%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 -12px 40px -12px rgba(20, 35, 28, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 -12px 40px -12px var(--shadow);
 }
+
+/* Hilfsflächen im Sheet, theme-abhängig */
+.ink-5  { background: color-mix(in srgb, var(--text) 6%, transparent); }
+.ink-15 { background: color-mix(in srgb, var(--text) 15%, transparent); }
+.surface { background: var(--surface); color: var(--text); }
+.btn-primary { background: var(--text); color: var(--sheet-solid); }
 
 /* kurzer Puls beim Punkte-Tap */
 @keyframes pop {

@@ -34,9 +34,9 @@ export function useGame() {
     }))
   }, [])
 
-  const setFont = useCallback((font: string) => {
-    setState((s) => ({ ...s, font }))
+  const setTheme = useCallback((theme: string) => {
+    setState((s) => ({ ...s, theme }))
   }, [])
 
-  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer, setFont }
+  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer, setTheme }
 }

@@ -35,27 +35,19 @@ export function PlayerTile({ player, score, count, index, onAdd }: Props) {
       type="button"
       onClick={() => bump(1)}
       className="tile relative flex flex-col items-center justify-center overflow-hidden rounded-3xl select-none outline-none active:scale-[0.985] transition-transform duration-100"
-      style={{
-        background: `linear-gradient(160deg, color-mix(in oklab, ${hex} 38%, white) 0%, color-mix(in oklab, ${hex} 18%, white) 100%)`,
-        boxShadow: `inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 0 1px rgba(255,255,255,0.55), 0 10px 30px -14px color-mix(in oklab, ${hex} 60%, transparent)`,
-      }}
+      style={{ ['--c' as string]: hex }}
     >
-      {/* weicher Farbfleck */}
-      <span
-        className="pointer-events-none absolute -top-1/4 -left-1/4 h-2/3 w-2/3 rounded-full blur-3xl opacity-50"
-        style={{ background: hex }}
-      />
+      {/* weiche Farbflecken (Airbrush-Look) */}
+      <span className="tile-glow pointer-events-none absolute -top-1/4 -left-1/4 h-2/3 w-2/3 rounded-full blur-3xl" />
+      <span className="tile-glow-2 pointer-events-none absolute -bottom-1/4 -right-1/4 h-2/3 w-2/3 rounded-full blur-3xl" />
 
-      <span
-        className={`relative font-semibold tracking-wide uppercase ${small ? 'text-sm' : 'text-lg'}`}
-        style={{ color: `color-mix(in oklab, ${hex} 70%, #1c2a24)` }}
-      >
+      <span className={`tile-name relative font-semibold tracking-wide uppercase ${small ? 'text-sm' : 'text-lg'}`}>
         {player.name || `Spieler ${index + 1}`}
       </span>
 
       <span
         key={pulse}
-        className="score relative font-bold tabular-nums leading-none text-[#14231c]"
+        className="score relative font-bold tabular-nums leading-none"
         style={{ fontSize: scoreSize(count) }}
       >
         {score}
@@ -76,7 +68,7 @@ function MiniButton({ label, onClick, small }: { label: string; onClick: () => v
       tabIndex={0}
       onClick={(e) => { e.stopPropagation(); onClick() }}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onClick() } }}
-      className={`glass rounded-full font-semibold tabular-nums text-[#14231c] active:scale-95 transition-transform ${small ? 'px-3 py-1 text-xs' : 'px-5 py-2 text-base'}`}
+      className={`glass rounded-full font-semibold tabular-nums active:scale-95 transition-transform ${small ? 'px-3 py-1 text-xs' : 'px-5 py-2 text-base'}`}
     >
       {label}
     </span>

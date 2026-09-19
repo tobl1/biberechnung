@@ -24,25 +24,25 @@ export function ControlBar({ onReset, onOpenSettings }: Props) {
   }
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex justify-center pb-[max(env(safe-area-inset-bottom),12px)]">
-      <div className="pointer-events-auto glass-strong flex items-center gap-1 rounded-full p-1.5">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex justify-center pb-[max(env(safe-area-inset-bottom),10px)]">
+      <div className="pointer-events-auto glass-strong flex items-center gap-0.5 rounded-full p-1">
         <button
           type="button"
           onClick={handleReset}
           aria-label={armed ? 'Nochmal tippen zum Zurücksetzen' : 'Neustart'}
-          className={`flex h-12 w-12 items-center justify-center rounded-full transition-all ${
-            armed ? 'bg-rose-500 text-white scale-110' : 'text-[#14231c]/80 hover:bg-black/5'
+          className={`flex h-9 w-11 items-center justify-center rounded-full transition-all ${
+            armed ? 'bg-rose-500 text-white scale-105' : 'opacity-80'
           }`}
         >
-          <RotateCcw size={20} />
+          <RotateCcw size={18} />
         </button>
         <button
           type="button"
           onClick={onOpenSettings}
           aria-label="Einstellungen"
-          className="flex h-12 w-12 items-center justify-center rounded-full text-[#14231c]/80 hover:bg-black/5"
+          className="flex h-9 w-11 items-center justify-center rounded-full opacity-80"
         >
-          <Settings size={20} />
+          <Settings size={18} />
         </button>
       </div>
     </div>
