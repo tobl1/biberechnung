@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Player } from '../lib/types'
-import type { GameArt } from '../lib/games'
+import { GAMES, type GameArt } from '../lib/games'
 import { hexFor } from '../lib/colors'
 import { TilePattern } from './TilePattern'
 
@@ -48,7 +48,7 @@ export function PlayerTile({ player, score, count, index, art, onAdd }: Props) {
       {art === 'pattern' && <TilePattern id={player.id} index={index} color={hex} />}
       {art === 'watermark' && (
         <img
-          src={`/themes/faraway/${(index % 8) + 1}.png`}
+          src={`/themes/faraway/${(index % (GAMES.faraway.images ?? 1)) + 1}.png`}
           alt=""
           className="tile-art tile-watermark pointer-events-none absolute"
           onError={(e) => { e.currentTarget.style.display = 'none' }}
