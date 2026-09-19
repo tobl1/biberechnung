@@ -188,7 +188,16 @@ body {
 
 /* Theme-Kunst in der Kachel */
 .tile-art { opacity: var(--art-opacity, 0); }
-.tile-watermark { right: 2%; bottom: 0; height: 82%; width: auto; max-width: 70%; object-fit: contain; object-position: bottom right; filter: saturate(0.7); }
+.tile-watermark {
+  inset: 0;
+  margin: auto;
+  width: 88%;
+  height: 92%;
+  object-fit: contain;
+  object-position: center;
+  filter: saturate(0.6);
+  opacity: calc(var(--art-opacity) * 0.5);
+}
 
 /* Im Körnig-Theme: Kacheln selbst zusätzlich körnig + stärkeres Airbrush-Blur */
 html[data-theme="grain"] .tile-glow,
