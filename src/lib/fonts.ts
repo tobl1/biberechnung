@@ -4,6 +4,7 @@ export const FONTS: Record<string, { label: string; hint: string; family: string
   space:  { label: 'Grotesk', hint: 'Technisch',     family: "'Space Grotesk', system-ui, sans-serif" },
   // New York ist Apples Systemserife — auf iPhone/Mac bereits vorhanden, sonst Georgia
   newyork:{ label: 'New York', hint: 'Serife',     family: "ui-serif, 'New York', Georgia, 'Times New Roman', serif" },
+  qaiken: { label: 'Qaiken',  hint: 'Display',     family: "'Qaiken', ui-serif, Georgia, serif" },
 }
 
 export const FONT_KEYS = Object.keys(FONTS)

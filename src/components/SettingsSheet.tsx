@@ -98,7 +98,7 @@ export function SettingsSheet({ open, players, theme, game, font, onClose, onSet
         {/* Schrift */}
         <div className="ink-5 mb-6 rounded-2xl p-3">
           <div className="mb-2 px-1 font-medium">Schrift</div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {FONT_KEYS.map((key) => {
               const active = key === font
               return (
