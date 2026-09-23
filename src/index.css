@@ -30,9 +30,9 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0b1612;
-  --text: #f2f5f2;
-  --tile-base: #0a1410;
+  --bg: #16181c;
+  --text: #f3f4f6;
+  --tile-base: #101216;
   --tile-mix-a: 34%;
   --tile-mix-b: 12%;
   --tile-hi: color-mix(in oklab, var(--c, #fff) 45%, transparent);
@@ -40,15 +40,15 @@ html[data-theme="dark"] {
   --name-mix: 100%;
   --glow-opacity: 0.4;
   --glass-bg: rgba(255, 255, 255, 0.10);
-  --glass-strong-bg: rgba(20, 35, 28, 0.75);
-  --sheet-bg: rgba(14, 28, 22, 0.94);
-  --sheet-solid: #0e1c16;
+  --glass-strong-bg: rgba(32, 35, 40, 0.78);
+  --sheet-bg: rgba(24, 26, 31, 0.95);
+  --sheet-solid: #181a1f;
   --surface: rgba(255, 255, 255, 0.10);
   --shadow: rgba(0, 0, 0, 0.6);
-  --blob-1: rgba(52, 211, 153, 0.25);
-  --blob-2: rgba(248, 113, 113, 0.18);
-  --blob-3: rgba(96, 165, 250, 0.20);
-  --blob-4: rgba(167, 139, 250, 0.18);
+  --blob-1: rgba(255, 255, 255, 0.07);
+  --blob-2: rgba(148, 163, 184, 0.10);
+  --blob-3: rgba(255, 255, 255, 0.05);
+  --blob-4: rgba(148, 163, 184, 0.08);
   --grain-opacity: 0;
   --art-opacity: 0.32;
 }
@@ -109,11 +109,15 @@ body {
 
 /* ---------- Hintergrund: driftende Farbflecken + Körnung ---------- */
 
-/* iOS malt unterhalb des Viewports (Toolbar / Web-App-Rand) nur die flache Hintergrundfarbe.
-   Deshalb blendet der Layer nach unten in genau diese Farbe aus — so gibt es keine sichtbare Kante. */
+/* 100lvh = größtmöglicher Viewport: deckt auch den Bereich hinter der Safari-Toolbar ab,
+   damit unten keine Kante entsteht. */
 .bg-layer {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100lvh;
+  min-height: 100%;
   z-index: 0;
   overflow: hidden;
   background: var(--bg);
@@ -152,14 +156,6 @@ body {
   mix-blend-mode: multiply;
   background-image: var(--noise);
   background-size: 200px 200px;
-}
-.bg-layer::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(to bottom, transparent 55%, var(--bg) 100%);
 }
 .bg-layer::after { z-index: 2; }
 .tile::before { z-index: 1; border-radius: inherit; }
