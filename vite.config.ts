@@ -14,8 +14,8 @@ export default defineConfig({
       manifest: false,
       includeAssets: ['favicon.png', 'apple-touch-icon.png', 'manifest.webmanifest'],
       workbox: {
-        // alles Gebaute plus Schriften, Icons und die Faraway-Bilder offline vorhalten
-        globPatterns: ['**/*.{js,css,html,png,woff2,webmanifest}'],
+        // alles Gebaute plus Icons und die Faraway-Bilder offline vorhalten
+        globPatterns: ['**/*.{js,css,html,png,webmanifest}'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         cleanupOutdatedCaches: true,
       },
