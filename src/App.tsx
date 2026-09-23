@@ -31,7 +31,7 @@ function App() {
   }, [game.theme])
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden">
+    <div className="relative h-full w-full overflow-hidden">
       <Background />
 
       <main

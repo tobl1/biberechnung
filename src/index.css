@@ -26,6 +26,7 @@
   --blob-4: rgba(254, 240, 138, 0.55);
   --grain-opacity: 0;
   --art-opacity: 0.42;
+  --halo: rgba(255, 255, 255, 0.85);
 }
 
 html[data-theme="dark"] {
@@ -51,6 +52,7 @@ html[data-theme="dark"] {
   --blob-4: rgba(148, 163, 184, 0.08);
   --grain-opacity: 0;
   --art-opacity: 0.32;
+  --halo: rgba(0, 0, 0, 0.6);
 }
 
 html[data-theme="grain"] {
@@ -76,6 +78,7 @@ html[data-theme="grain"] {
   --blob-4: rgba(253, 186, 116, 0.4);
   --grain-opacity: 0.9;
   --art-opacity: 0.4;
+  --halo: rgba(255, 255, 255, 0.9);
 }
 
 /* ---------- Basis ---------- */
@@ -109,15 +112,12 @@ body {
 
 /* ---------- Hintergrund: driftende Farbflecken + Körnung ---------- */
 
-/* 100lvh = größtmöglicher Viewport: deckt auch den Bereich hinter der Safari-Toolbar ab,
-   damit unten keine Kante entsteht. */
+/* Liegt absolut im Wurzel-Container (Höhe 100% von html/body) statt an dvh gebunden:
+   in installierten Web-Apps meldet iOS dvh manchmal kleiner als den echten Fensterbereich. */
 .bg-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100lvh;
-  min-height: 100%;
+  position: absolute;
+  inset: 0;
+  min-height: 100lvh;
   z-index: 0;
   overflow: hidden;
   background: var(--bg);
@@ -180,7 +180,13 @@ body {
 }
 .tile-glow   { background: var(--c); opacity: var(--glow-opacity); }
 .tile-glow-2 { background: color-mix(in oklab, var(--c) 60%, #fff); opacity: calc(var(--glow-opacity) * 0.5); }
-.tile-name   { color: color-mix(in oklab, var(--c) var(--name-mix), var(--text)); }
+.tile-name {
+  color: color-mix(in oklab, var(--c) var(--name-mix), var(--text));
+  /* Kontur in Hintergrundfarbe hinter die Glyphen legen, damit der Name auf Mustern lesbar bleibt */
+  -webkit-text-stroke: 3px var(--halo);
+  paint-order: stroke fill;
+  text-shadow: 0 1px 3px var(--halo);
+}
 
 /* Theme-Kunst in der Kachel */
 .tile-art { opacity: var(--art-opacity, 0); }
