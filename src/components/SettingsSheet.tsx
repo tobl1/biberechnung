@@ -3,6 +3,7 @@ import type { Player } from '../lib/types'
 import { PALETTE, PALETTE_KEYS } from '../lib/colors'
 import { THEMES, THEME_KEYS } from '../lib/themes'
 import { GAMES, GAME_KEYS } from '../lib/games'
+import { FONTS, FONT_KEYS } from '../lib/fonts'
 import { MIN_PLAYERS, MAX_PLAYERS } from '../lib/storage'
 
 type Props = {
@@ -10,15 +11,17 @@ type Props = {
   players: Player[]
   theme: string
   game: string
+  font: string
   onClose: () => void
   onSetCount: (n: number) => void
   onUpdate: (id: string, patch: Partial<Omit<Player, 'id'>>) => void
   onSetTheme: (key: string) => void
   onSetGame: (key: string) => void
+  onSetFont: (key: string) => void
 }
 
 // Bottom-Sheet mit Spieleranzahl, Design, Namen und Farben
-export function SettingsSheet({ open, players, theme, game, onClose, onSetCount, onUpdate, onSetTheme, onSetGame }: Props) {
+export function SettingsSheet({ open, players, theme, game, font, onClose, onSetCount, onUpdate, onSetTheme, onSetGame, onSetFont }: Props) {
   return (
     <>
       <div
@@ -86,6 +89,29 @@ export function SettingsSheet({ open, players, theme, game, onClose, onSetCount,
                 >
                   <span className="block text-sm font-semibold">{GAMES[key].label}</span>
                   <span className="block text-[11px] opacity-60">{GAMES[key].hint}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Schrift */}
+        <div className="ink-5 mb-6 rounded-2xl p-3">
+          <div className="mb-2 px-1 font-medium">Schrift</div>
+          <div className="grid grid-cols-3 gap-2">
+            {FONT_KEYS.map((key) => {
+              const active = key === font
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => onSetFont(key)}
+                  className={`rounded-xl px-2 py-2 text-center transition-colors ${active ? 'btn-primary' : 'surface'}`}
+                  style={{ fontFamily: FONTS[key].family }}
+                >
+                  <span className="block text-2xl font-bold tabular-nums leading-tight">42</span>
+                  <span className="block text-sm font-semibold">{FONTS[key].label}</span>
+                  <span className="block text-[11px] opacity-60">{FONTS[key].hint}</span>
                 </button>
               )
             })}

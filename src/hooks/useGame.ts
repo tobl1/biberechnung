@@ -42,5 +42,9 @@ export function useGame() {
     setState((s) => ({ ...s, game }))
   }, [])
 
-  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer, setTheme, setGame }
+  const setFont = useCallback((font: string) => {
+    setState((s) => ({ ...s, font }))
+  }, [])
+
+  return { ...state, addPoints, resetScores, setPlayerCount, updatePlayer, setTheme, setGame, setFont }
 }

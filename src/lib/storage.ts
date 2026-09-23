@@ -2,6 +2,7 @@ import type { GameState, Player } from './types'
 import { PALETTE_KEYS } from './colors'
 import { DEFAULT_THEME } from './themes'
 import { DEFAULT_GAME } from './games'
+import { DEFAULT_FONT } from './fonts'
 
 const KEY = 'biberechnung:v1'
 
@@ -14,7 +15,7 @@ export function defaultState(): GameState {
     { id: 'p1', name: 'M', color: 'mint' },
     { id: 'p2', name: 'T', color: 'rot' },
   ]
-  return { players, scores: Object.fromEntries(players.map((p) => [p.id, 0])), theme: DEFAULT_THEME, game: DEFAULT_GAME }
+  return { players, scores: Object.fromEntries(players.map((p) => [p.id, 0])), theme: DEFAULT_THEME, game: DEFAULT_GAME, font: DEFAULT_FONT }
 }
 
 // Neue Spieler ohne Namen, aber mit noch unbenutzter Farbe
@@ -29,7 +30,7 @@ export function loadState(): GameState {
     if (!raw) return defaultState()
     const parsed = JSON.parse(raw) as Partial<GameState>
     if (!Array.isArray(parsed.players) || parsed.players.length < MIN_PLAYERS) return defaultState()
-    return { players: parsed.players, scores: parsed.scores ?? {}, theme: parsed.theme ?? DEFAULT_THEME, game: parsed.game ?? DEFAULT_GAME }
+    return { players: parsed.players, scores: parsed.scores ?? {}, theme: parsed.theme ?? DEFAULT_THEME, game: parsed.game ?? DEFAULT_GAME, font: parsed.font ?? DEFAULT_FONT }
   } catch {
     return defaultState()
   }

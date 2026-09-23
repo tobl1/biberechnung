@@ -5,7 +5,7 @@ export const CARD_SIZE = 72
 
 const S = CARD_SIZE
 const H = S / 2
-const SC = 0.42 // Symbolgröße
+const SC = 0.55 // Symbolgröße
 
 // Versetztes Raster: vier Symbole pro Kachel, an den Rändern gespiegelt fortgesetzt
 export const CARD_PATTERNS: string[] = [

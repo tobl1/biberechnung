@@ -9,4 +9,5 @@ export type GameState = {
   scores: Record<string, number>
   theme: string // Key aus THEMES
   game: string // Key aus GAMES
+  font: string // Key aus FONTS
 }

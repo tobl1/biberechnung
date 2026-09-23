@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useGame } from './hooks/useGame'
 import { GAMES } from './lib/games'
+import { FONTS } from './lib/fonts'
 import { Background } from './components/Background'
 import { PlayerTile } from './components/PlayerTile'
 import { ControlBar } from './components/ControlBar'
@@ -19,6 +20,10 @@ function App() {
   const { cols, rows } = gridFor(game.players.length)
 
   // Theme aufs <html> setzen, damit CSS-Variablen + Body-Hintergrund mitziehen
+  useEffect(() => {
+    document.documentElement.style.setProperty('--font', FONTS[game.font]?.family ?? FONTS.system.family)
+  }, [game.font])
+
   useEffect(() => {
     document.documentElement.dataset.theme = game.theme
     const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
@@ -57,11 +62,13 @@ function App() {
         players={game.players}
         theme={game.theme}
         game={game.game}
+        font={game.font}
         onClose={() => setSettingsOpen(false)}
         onSetCount={game.setPlayerCount}
         onUpdate={game.updatePlayer}
         onSetTheme={game.setTheme}
         onSetGame={game.setGame}
+        onSetFont={game.setFont}
       />
     </div>
   )
