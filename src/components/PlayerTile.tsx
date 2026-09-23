@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Player } from '../lib/types'
-import { GAMES, type GameArt } from '../lib/games'
+import { GAMES, type GameArt, type PatternSet } from '../lib/games'
 import { hexFor } from '../lib/colors'
 import { TilePattern } from './TilePattern'
 
@@ -10,6 +10,7 @@ type Props = {
   count: number // Anzahl Spieler gesamt → steuert Schriftgröße
   index: number
   art: GameArt
+  set: PatternSet
   onAdd: (delta: number) => void
 }
 
@@ -22,7 +23,7 @@ function scoreSize(count: number): string {
   return 'clamp(2.6rem, 12vw, 4.5rem)'
 }
 
-export function PlayerTile({ player, score, count, index, art, onAdd }: Props) {
+export function PlayerTile({ player, score, count, index, art, set, onAdd }: Props) {
   const hex = hexFor(player.color)
   const [pulse, setPulse] = useState(0)
 
@@ -45,7 +46,7 @@ export function PlayerTile({ player, score, count, index, art, onAdd }: Props) {
       <span className="tile-glow-2 pointer-events-none absolute -bottom-1/4 -right-1/4 h-2/3 w-2/3 rounded-full blur-3xl" />
 
       {/* Spiel-Overlay: Fliesenmuster oder Wasserzeichen */}
-      {art === 'pattern' && <TilePattern id={player.id} index={index} color={hex} />}
+      {art === 'pattern' && <TilePattern id={player.id} index={index} color={hex} set={set} />}
       {art === 'watermark' && (
         <img
           src={`/themes/faraway/${(index % (GAMES.faraway.images ?? 1)) + 1}.png`}

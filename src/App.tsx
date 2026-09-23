@@ -44,6 +44,7 @@ function App() {
             score={game.scores[p.id] ?? 0}
             count={game.players.length}
             art={GAMES[game.game]?.art ?? 'none'}
+            set={GAMES[game.game]?.set ?? 'azul'}
             onAdd={(d) => game.addPoints(p.id, d)}
           />
         ))}
